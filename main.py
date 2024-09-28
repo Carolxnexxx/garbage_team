@@ -19,12 +19,13 @@ class Game:
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
-        self.house_spritesheet = Spritesheet('assets/images/housefence.png') 
+        self.house_spritesheet = Spritesheet('assets/images/house.png') 
         self.wall_spritesheet = Spritesheet('assets/images/wall.png') 
         self.doorP1_spritesheet = Spritesheet('assets/images/doorP1.png') 
         self.doorP2_spritesheet = Spritesheet('assets/images/doorP2.png') 
         self.doorP3_spritesheet = Spritesheet('assets/images/doorP3.png') 
         self.player_spritesheet = Spritesheet('assets/images/player.png') 
+        self.castlefloor_spritesheet = Spritesheet('assets/images/castlefloor.png') 
         self.running = True
 
     def createTileMap(self):
@@ -40,12 +41,21 @@ class Game:
                     Ground(self, j, i, 66, 0) # Dirt block
                 elif column == "S":
                     Ground(self, j, i, 90, 0)  # Sand block
-                elif column == "H":
-                    House(self, j, i, 18, 12)
                 elif column == "A":
                     Wall(self, j, i, 0, 0)
+                elif column == "1":
+                    WaterDoor1(self, j, i, 0, 0)
+                elif column == "2":
+                    IceDoor1(self, j, i, 0, 0)
+                elif column == "3":
+                    WoodDoor1(self, j, i, 0, 0)
+                elif column == "C":
+                    CastleFloor(self, j, i,0,0)
+                elif column == "H":
+                    House(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self,j,i)
+                
             
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()

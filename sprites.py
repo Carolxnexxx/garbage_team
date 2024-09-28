@@ -5,7 +5,7 @@ class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = BLOCKS_LAYER
-        self.groups = self.game.all_sprites, self.game.blocks
+        self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.x = x * TILESIZE
@@ -59,7 +59,7 @@ class Wall(pygame.sprite.Sprite): # wall of the puzzle domains
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = HOUSE_LAYER
-        self.groups = self.game.all_sprites
+        self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.x = x * TILESIZE
@@ -127,6 +127,24 @@ class WoodDoor1(pygame.sprite.Sprite): # wall of the puzzle domains
 
         # Load the ground image from the spritesheet using the provided coordinates
         self.image = self.game.doorP3_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+class CastleFloor(pygame.sprite.Sprite):  # Wall of the puzzle domains
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = HOUSE_LAYER
+        self.groups = self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        self.image = self.game.castlefloor_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
