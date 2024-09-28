@@ -215,9 +215,9 @@ class EarthP1(pygame.sprite.Sprite):
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, img_x, img_y, trivia_game):
+    def __init__(self, game, x, y):
         self.game = game
-        self.trivia_game = trivia_game  # Store reference to trivia game
+        # self.trivia_game = trivia_game  # Store reference to trivia game
         self._layer = PLAYER_LAYER
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
