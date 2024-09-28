@@ -19,7 +19,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
-        self.housefence_spritesheet = Spritesheet('assets/images/housefence.png') 
+        self.house_spritesheet = Spritesheet('assets/images/housefence.png') 
         self.wall_spritesheet = Spritesheet('assets/images/wall.png') 
         self.doorP1_spritesheet = Spritesheet('assets/images/doorP1.png') 
         self.doorP2_spritesheet = Spritesheet('assets/images/doorP2.png') 
@@ -42,6 +42,8 @@ class Game:
                     Ground(self, j, i, 90, 0)  # Sand block
                 elif column == "H":
                     House(self, j, i, 18, 12)
+                elif column == "A":
+                    Block(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self,j,i)
             
