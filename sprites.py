@@ -44,16 +44,19 @@ class House(pygame.sprite.Sprite):
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.x = x * TILESIZE
-        self.y = y * TILESIZE
-
         self.width = TILESIZE
         self.height = TILESIZE
 
+        scale_factor = 2.5
+
         self.image = self.game.house_spritesheet.get_image(img_x, img_y, self.width, self.height)
+
+        self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
+
         self.rect = self.image.get_rect()
-        self.rect.x = self.x
-        self.rect.y = self.y
+
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
 
 class Wall(pygame.sprite.Sprite): # wall of the puzzle domains
     def __init__(self, game, x, y, img_x, img_y):
@@ -149,10 +152,10 @@ class CastleFloor(pygame.sprite.Sprite):  # Wall of the puzzle domains
         self.rect.x = self.x
         self.rect.y = self.y
 
-class Puzzle1(pygame.sprite.Sprite):
+class EarthP1(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
-        self._layer = HOUSE_LAYER
+        self._layer = PUZZLE_LAYER
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
 

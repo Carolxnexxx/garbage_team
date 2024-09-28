@@ -55,6 +55,9 @@ class Game:
                     House(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self,j,i)
+        house_x = 7
+        house_y = 15
+        self.house = House(self, house_x, house_y, 0, 0)
                 
             
     def create(self):
