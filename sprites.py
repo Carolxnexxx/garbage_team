@@ -14,7 +14,6 @@ class Block(pygame.sprite.Sprite):
         self.width = TILESIZE
         self.height = TILESIZE
 
-        # Load the block image from the spritesheet using the provided coordinates
         self.image = self.game.terrain_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.rect = self.image.get_rect()
         self.rect.x = self.x
@@ -33,7 +32,6 @@ class Ground(pygame.sprite.Sprite):
         self.width = TILESIZE
         self.height = TILESIZE
 
-        # Load the ground image from the spritesheet using the provided coordinates
         self.image = self.game.terrain_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.rect = self.image.get_rect()
         self.rect.x = self.x
@@ -52,7 +50,6 @@ class House(pygame.sprite.Sprite):
         self.width = TILESIZE
         self.height = TILESIZE
 
-        # Load the ground image from the spritesheet using the provided coordinates
         self.image = self.game.house_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.rect = self.image.get_rect()
         self.rect.x = self.x
@@ -71,7 +68,6 @@ class Puzzle1(pygame.sprite.Sprite):
         self.width = TILESIZE
         self.height = TILESIZE
 
-        # Load the ground image from the spritesheet using the provided coordinates
         self.image = self.game.house_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.rect = self.image.get_rect()
         self.rect.x = self.x
@@ -79,22 +75,23 @@ class Puzzle1(pygame.sprite.Sprite):
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
+
         self.game = game
         self._layer = PLAYER_LAYER
+        self.healthbar = Player_Healthbar(game, x, y, 40, 10)
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.x = x * 30
-        self.y = y * 30
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
 
-        self.width = 30
-        self.height = 30
+        self.width = TILESIZE
+        self.height = TILESIZE
 
         self.x_change = 0
         self.y_change = 0
 
-        # Load the player image from the spritesheet using the provided coordinates
-        self.image = self.game.player_spritesheet.get_image(0, 10, self.width, self.height)
+        self.image = self.game.player_spritesheet.get_image(0, 0, self.width, self.height)
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -133,9 +130,34 @@ class Player(pygame.sprite.Sprite):
         if collide:
             if pressed[pygame.K_LEFT]:
                 self.rect.x += PLAYER_STEPS
-            elif pressed[pygame.K_RIGHT]:
+            if pressed[pygame.K_RIGHT]:
                 self.rect.x -= PLAYER_STEPS
-            elif pressed[pygame.K_UP]:
+            if pressed[pygame.K_UP]:
                 self.rect.y += PLAYER_STEPS
-            elif pressed[pygame.K_DOWN]:
+            if pressed[pygame.K_DOWN]:
                 self.rect.y -= PLAYER_STEPS
+
+class Player_Healthbar(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = HEALTH_LAYER
+        self.groups = self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+
+        self.width = 40
+        self.height = 10
+
+        self.image = pygame.Surface([self.width, self.height])
+        self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y - TILESIZE/2
+    
+    def move(self):
+        self.rect.x = self.game.player.rect.x
+        self.rect.y = self.game.player.rect.y - TILESIZE/2
+    def update(self):
+        self.move()

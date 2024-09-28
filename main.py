@@ -9,7 +9,7 @@ class Spritesheet:
     def get_image(self, x,y, width, height):
         sprite = pygame.Surface([width, height], pygame.SRCALPHA)  # Allows transparency
         sprite.blit(self.spritesheet, (0, 0), (x, y, width, height))
-        sprite.set_colorkey(BLACK) 
+        sprite.set_colorkey(RED) 
         
         return sprite
 
@@ -55,7 +55,7 @@ class Game:
                 self.running = False
     
     def draw(self):
-        self.screen.fill(BLACK) 
+        self.screen.fill(RED) 
         self.all_sprites.draw(self.screen)
         self.clock.tick(FPS)
         pygame.display.update()
