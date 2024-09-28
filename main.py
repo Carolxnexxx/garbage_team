@@ -19,15 +19,22 @@ class Game:
     def __init__(self):
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
-        self.terrain_spritesheet = Spritesheet('assets/images/terrain.jpg') 
+        self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
         self.running = True
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
-                Ground(self,j,i)
-                if column == "B":
-                    Block(self,j,i)
+                if column == "G":
+                    Block(self, j, i, 0, 0)  # Grass block
+                elif column == "W":
+                    Block(self, j, i, 22, 0)  # Water block
+                elif column == "I":
+                    Block(self, j, i, 44, 0)  # Ice block
+                elif column == "D":
+                    Block(self, j, i, 66, 0) # Dirt block
+                elif column == "S":
+                    Block(self, j, i, 90, 0)  # Sand block
     
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
