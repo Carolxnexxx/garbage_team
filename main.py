@@ -43,7 +43,7 @@ class Game:
                 elif column == "H":
                     House(self, j, i, 18, 12)
                 elif column == "A":
-                    Block(self, j, i, 0, 0)
+                    Wall(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self,j,i)
             
