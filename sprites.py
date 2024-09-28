@@ -59,52 +59,51 @@ class House(pygame.sprite.Sprite):
         self.rect.y = self.y
 
 class Player(pygame.sprite.Sprite):
-    def init(self,game,x,y):
-        self.game=game
-        self._layer=PLAYER_LAYER
-        self.x = x*TILESIZE
-        self.y = y*TILESIZE
+    def __init__(self, game, x, y):
+        self.game = game
+        self._layer = PLAYER_LAYER
+        self.groups = self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.width = TILESIZE
-        self.height = TILESIZE
+        self.x = x * 30
+        self.y = y * 30
 
-        self.x_change= 0
-        self.y_change= 0
+        self.width = 30
+        self.height = 30
 
-        self.image = self.image.load()
+        self.x_change = 0
+        self.y_change = 0
+
+        # Load the player image from the spritesheet using the provided coordinates
+        self.image = self.game.player_spritesheet.get_image(0, 10, self.width, self.height)
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
     def move(self):
         pressed = pygame.key.get_pressed()
+
+        self.x_change = 0  # Reset x and y changes before calculating new movement
+        self.y_change = 0
+
         if pressed[pygame.K_LEFT]:
-            self.x_change = self.x_change - STEPS
+            self.x_change = -PLAYER_STEPS  # Move left
         if pressed[pygame.K_RIGHT]:
-            self.x_change = self.x_change + STEPS
+            self.x_change = PLAYER_STEPS  # Move right
         if pressed[pygame.K_UP]:
-            self.y_change = self.y_change - STEPS
+            self.y_change = -PLAYER_STEPS  # Move up
         if pressed[pygame.K_DOWN]:
-            self.y_change = self.y_change + STEPS
+            self.y_change = PLAYER_STEPS  # Move down
 
     def update(self):
         self.move()
-        self.collide()
-        self.rect.x = self.rect.x + self.x_change
-        self.rect.y = self.rect.y + self.y_change
-        self.rect.x = 0
-        self.rect.y = 0
 
-    def collide(self):
-        pressed = pygame.key.get_pressed()
-        collide = pygame.sprite.spritecollide(self,self.game.blocks, False, pygame.sprite.collide_rect_ratio(0.5))
-        if collide:
-            self.game.block.collide = True
-            if pressed[pygame.K_LEFT]:
-                self.x_change = self.x_change + STEPS
-            if pressed[pygame.K_RIGHT]:
-                self.x_change = self.x_change - STEPS
-            if pressed[pygame.K_UP]:
-                self.y_change = self.y_change + STEPS
-            if pressed[pygame.K_DOWN]:
-                self.y_change = self.y_change - STEPS
+        # Apply the movement to the player's position
+        self.rect.x += self.x_change  # Apply horizontal movement
+        self.rect.y += self.y_change  # Apply vertical movement
+
+        # Reset changes after each update
+        self.x_change = 0
+        self.y_change = 0
+
+        
