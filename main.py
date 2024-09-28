@@ -24,8 +24,10 @@ class Game:
         self.doorP1_spritesheet = Spritesheet('assets/images/doorP1.png') 
         self.doorP2_spritesheet = Spritesheet('assets/images/doorP2.png') 
         self.doorP3_spritesheet = Spritesheet('assets/images/doorP3.png') 
+        self.earthP1_spritesheet = Spritesheet('assets/images/earthP1.png')
         self.player_spritesheet = Spritesheet('assets/images/player.png') 
         self.castlefloor_spritesheet = Spritesheet('assets/images/castlefloor.png') 
+        self.factory_spritesheet = Spritesheet('assets/images/factory.png')
         self.running = True
 
     def createTileMap(self):
@@ -55,9 +57,10 @@ class Game:
                     House(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self,j,i)
-        house_x = 7
-        house_y = 15
-        self.house = House(self, house_x, house_y, 0, 0)
+        
+        self.house = House(self, 7, 15, 0, 0)
+        self.factory = Factory(self, 18, 20, 0, 0)
+        self.earthP1 = EarthP1(self, 5, 5, 70, 70)
                 
             
     def create(self):
