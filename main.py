@@ -2,6 +2,7 @@ from configuration import *
 import sys
 import pygame
 from sprites import *
+pygame.font.init()
 
 class Spritesheet:
     def __init__(self, path):
@@ -16,6 +17,7 @@ class Spritesheet:
 class Game:
 
     def __init__(self):
+        pygame.init()
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
@@ -29,6 +31,8 @@ class Game:
         self.castlefloor_spritesheet = Spritesheet('assets/images/castlefloor.png') 
         self.factory_spritesheet = Spritesheet('assets/images/factory.png')
         self.running = True
+        self.trivia_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT)) 
+        self.trivia_game = TriviaGame(self) 
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
@@ -56,7 +60,8 @@ class Game:
                 elif column == "H":
                     House(self, j, i, 0, 0)
                 elif column == "P":
-                    self.player = Player(self,j,i)
+                    self.player = Player(self, j, i, 0, 0, self.trivia_game)
+
         
         self.house = House(self, 7, 15, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
