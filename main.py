@@ -16,6 +16,7 @@ class Spritesheet:
 class Game:
 
     def __init__(self):
+        pygame.init() # EDLYN ADDED THIS LINE TEST
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
@@ -27,6 +28,9 @@ class Game:
         self.player_spritesheet = Spritesheet('assets/images/player.png') 
         self.castlefloor_spritesheet = Spritesheet('assets/images/castlefloor.png') 
         self.running = True
+
+        self.trivia_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT))  # EDLYN ADDED THIS LINE TEST
+        self.trivia_game = TriviaGame(self) # EDLYN ADDED THIS LINE TEST
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
@@ -54,11 +58,9 @@ class Game:
                 elif column == "H":
                     House(self, j, i, 0, 0)
                 elif column == "P":
-                    self.player = Player(self,j,i)
+                    self.player = Player(self,j,i, 0, 0, self.trivia_game)
         house_x = 7
         house_y = 15
-        self.house = House(self, house_x, house_y, 0, 0)
-                
             
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
