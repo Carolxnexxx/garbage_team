@@ -5,7 +5,7 @@ class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = BLOCKS_LAYER
-        self.groups = self.game.all_sprites
+        self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.x = x * TILESIZE
@@ -40,6 +40,25 @@ class Ground(pygame.sprite.Sprite):
         self.rect.y = self.y
 
 class House(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = HOUSE_LAYER
+        self.groups = self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        # Load the ground image from the spritesheet using the provided coordinates
+        self.image = self.game.house_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+class Puzzle1(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = HOUSE_LAYER
@@ -106,4 +125,17 @@ class Player(pygame.sprite.Sprite):
         self.x_change = 0
         self.y_change = 0
 
-        
+        self.collide_block()
+
+    def collide_block(self):
+        pressed = pygame.key.get_pressed()
+        collide = pygame.sprite.spritecollide(self, self.game.blocks, False) # important
+        if collide:
+            if pressed[pygame.K_LEFT]:
+                self.rect.x += PLAYER_STEPS
+            elif pressed[pygame.K_RIGHT]:
+                self.rect.x -= PLAYER_STEPS
+            elif pressed[pygame.K_UP]:
+                self.rect.y += PLAYER_STEPS
+            elif pressed[pygame.K_DOWN]:
+                self.rect.y -= PLAYER_STEPS
