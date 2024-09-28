@@ -22,6 +22,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
         self.house_spritesheet = Spritesheet('assets/images/house.png') 
+        self.fish_spritesheet = Spritesheet('assets/images/fish.png') 
         self.wall_spritesheet = Spritesheet('assets/images/wall.png') 
         self.doorP1_spritesheet = Spritesheet('assets/images/doorP1.png') 
         self.doorP2_spritesheet = Spritesheet('assets/images/doorP2.png') 
@@ -59,8 +60,8 @@ class Game:
                     WoodDoor1(self, j, i, 0, 0)
                 elif column == "C":
                     CastleFloor(self, j, i,0,0)
-                elif column == "H":
-                    House(self, j, i, 0, 0)
+                #elif column == "H":
+                    #House(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self, j, i, 0, 0, self.trivia_game)
 
@@ -70,6 +71,9 @@ class Game:
         self.earthP1 = EarthP1(self, 1, 1, 40, 40)
         self.earthP2 = EarthP2(self, 32, 2, 40, 40)
         self.earthP3 = EarthP3(self, 28, 21, 40, 40)
+        self.fish = Fish(self, 22, 10, 0, 0)
+        self.earthP1 = EarthP1(self, 5, 5, 70, 70)
+                
             
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
