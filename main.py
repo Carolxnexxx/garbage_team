@@ -20,6 +20,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
+        self.house_spritesheet = Spritesheet('assets/images/house.png') 
         self.running = True
 
     def createTileMap(self):
@@ -35,6 +36,8 @@ class Game:
                     Block(self, j, i, 66, 0) # Dirt block
                 elif column == "S":
                     Block(self, j, i, 90, 0)  # Sand block
+                elif column == "H":
+                    House(self, j, i, 18, 12)
     
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
