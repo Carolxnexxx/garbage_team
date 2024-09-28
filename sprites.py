@@ -252,9 +252,9 @@ class EarthP3(pygame.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, img_x, img_y, trivia_game):
         self.game = game
-        # self.trivia_game = trivia_game  # Store reference to trivia game
+        self.trivia_game = trivia_game
         self._layer = PLAYER_LAYER
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
@@ -306,7 +306,6 @@ class Player(pygame.sprite.Sprite):
         pressed = pygame.key.get_pressed()
         collide = pygame.sprite.spritecollide(self, self.game.blocks, False, pygame.sprite.collide_rect_ratio(0.85) ) # important
         if collide:
-            print("hi")
             self.trivia_game.draw_question()
             if pressed[pygame.K_LEFT]:
                 self.rect.x += PLAYER_STEPS
@@ -317,71 +316,78 @@ class Player(pygame.sprite.Sprite):
             elif pressed[pygame.K_DOWN]:
                 self.rect.y -= PLAYER_STEPS
 
-trivia_data = [
+
+questions = [
     {
-        "question": "Choose a renewable energy source",
-        "options": ["natural gas, nuclear, coal, hydroelectricity"],
-        "correct": 4
+        "question": "Choose a renewable energy source:",
+        "options": [
+            "1. Natural gas",
+            "2. Nuclear",
+            "3. Coal",
+            "4. Hydroelectricity"
+        ],
+        "answer": 4
     },
     {
-        "question": "How many tonnes of CO2 is emmitted per year?",
-        "options": ["34 billion, 100 million, 63 billion, 21 billion"],
-        "correct": 1
+        "question": "How many tonnes of CO2 are emitted per year?",
+        "options": [
+            "1. 34 billion",
+            "2. 100 million",
+            "3. 63 billion",
+            "4. 21 billion"
+        ],
+        "answer": 1
     },
     {
-        "question": "",
+        "question": "The answer is 1",
         "options": [""],
-        "correct": 1
+        "answer": 1
     }
 ]
+FONT_SIZE = 40
+WIDTH, HEIGHT = 800, 600
 
 class TriviaGame:
     def __init__(self, game):
         self.game = game
-        self.current_question_index = 0
+        self.current_question = 0
         self.score = 0
-        self.selected_answer = None
-        self.font = pygame.font.Font(None, 36)  # Load font
-        self.running = True
+        self.font = pygame.font.SysFont('Arial', FONT_SIZE)
 
     def draw_question(self):
-        print("hidraw qq")
-        self.trivia_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT))
-        self.trivia_surface.fill((255, 255, 255))
-        current_question = trivia_data[self.current_question_index]
+        if self.current_question < len(questions):
+            question_data = questions[self.current_question]
+            self.game.screen.fill(WHITE)
+            question_text = self.font.render(question_data["question"], True, BLACK)
+            self.game.screen.blit(question_text, (50, 50))
 
-        question_surface = self.font.render(current_question["question"], True, (0, 0, 0))
-        self.game.trivia_surface.blit(question_surface, (50, 50))
+            for i, option in enumerate(question_data["options"]):
+                option_text = self.font.render(option, True, BLACK)
+                self.game.screen.blit(option_text, (50, 150 + i * 50))
 
-        for i, option in enumerate(current_question["options"]):
-            option_surface = self.font.render(f"{i + 1}: {option}", True, (0, 0, 0))
-            self.game.trivia_surface.blit(option_surface, (50, 100 + i * 50))
-
-        pygame.display.flip()
-
-    def events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key in (pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4):
-                    self.selected_answer = event.key - pygame.K_1 + 1  # Normalize to 1-4
-                    self.check_answer()
-
-    def check_answer(self):
-        current_question = trivia_data[self.current_question_index]
-        if self.selected_answer == current_question["correct"]:
-            self.score += 1
-        self.current_question_index += 1
-
-        if self.current_question_index >= len(trivia_data):
-            self.show_result()
+            pygame.display.flip()
+            self.wait_for_answer()
         else:
-            self.draw_question()
+            self.display_final_score()
 
-    def show_result(self):
-        self.game.trivia_surface.fill((255, 255, 255))
-        final_score_surface = self.font.render(f"Final Score: {self.score}/{len(trivia_data)}", True, (0, 0, 0))
-        self.game.trivia_surface.blit(final_score_surface, (250, 250))
+    def wait_for_answer(self):
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]:
+                        selected_answer = event.key - pygame.K_0
+                        if selected_answer == questions[self.current_question]["answer"]:
+                            self.score += 1
+                        self.current_question += 1
+                        waiting = False
+                        self.draw_question()  # Redraw the question or move to final score if done
+
+    def display_final_score(self):
+        self.game.screen.fill(WHITE)
+        score_text = self.font.render(f"Your Score: {self.score}/{len(questions)}", True, BLACK)
+        self.game.screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2))
         pygame.display.flip()
-        self.game.trivia_game = None  # Reset trivia game for next time
+        pygame.time.wait(3000)
