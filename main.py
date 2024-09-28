@@ -20,6 +20,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
         self.house_spritesheet = Spritesheet('assets/images/house.png') 
+        self.fish_spritesheet = Spritesheet('assets/images/fish.png') 
         self.wall_spritesheet = Spritesheet('assets/images/wall.png') 
         self.doorP1_spritesheet = Spritesheet('assets/images/doorP1.png') 
         self.doorP2_spritesheet = Spritesheet('assets/images/doorP2.png') 
@@ -53,13 +54,14 @@ class Game:
                     WoodDoor1(self, j, i, 0, 0)
                 elif column == "C":
                     CastleFloor(self, j, i,0,0)
-                elif column == "H":
-                    House(self, j, i, 0, 0)
+                #elif column == "H":
+                    #House(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self,j,i)
         
         self.house = House(self, 7, 15, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
+        self.fish = Fish(self, 22, 10, 0, 0)
         self.earthP1 = EarthP1(self, 5, 5, 70, 70)
                 
             

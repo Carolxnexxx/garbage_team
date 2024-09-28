@@ -100,6 +100,27 @@ class Factory(pygame.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
+class Fish(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = HOUSE_LAYER
+        self.groups = self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        scale_factor = 2.5
+
+        self.image = self.game.fish_spritesheet.get_image(img_x, img_y, self.width, self.height)
+
+        self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
+
+        self.rect = self.image.get_rect()
+
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
 class Wall(pygame.sprite.Sprite): # wall of the puzzle domains
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
