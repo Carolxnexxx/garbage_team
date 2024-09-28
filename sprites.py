@@ -88,8 +88,23 @@ class Player(pygame.sprite.Sprite):
             self.y_change = self.y_change + STEPS
 
     def update(self):
-        self.move
+        self.move()
+        self.collide()
         self.rect.x = self.rect.x + self.x_change
         self.rect.y = self.rect.y + self.y_change
         self.rect.x = 0
         self.rect.y = 0
+
+    def collide(self):
+        pressed = pygame.key.get_pressed()
+        collide = pygame.sprite.spritecollide(self,self.game.blocks, False, pygame.sprite.collide_rect_ratio(0.5))
+        if collide:
+            self.game.block.collide = True
+            if pressed[pygame.K_LEFT]:
+                self.x_change = self.x_change + STEPS
+            if pressed[pygame.K_RIGHT]:
+                self.x_change = self.x_change - STEPS
+            if pressed[pygame.K_UP]:
+                self.y_change = self.y_change + STEPS
+            if pressed[pygame.K_DOWN]:
+                self.y_change = self.y_change - STEPS
