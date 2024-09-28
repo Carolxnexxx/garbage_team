@@ -14,6 +14,8 @@ PLAYER_STEPS = 3
 
 RED = (227, 145, 145)
 GREEN = (145, 227, 152)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 # 40 characters across, G, W, I, D, S
 tilemap = [
