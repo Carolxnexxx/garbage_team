@@ -25,6 +25,8 @@ class Game:
         self.doorP2_spritesheet = Spritesheet('assets/images/doorP2.png') 
         self.doorP3_spritesheet = Spritesheet('assets/images/doorP3.png') 
         self.earthP1_spritesheet = Spritesheet('assets/images/earthP1.png')
+        self.earthP2_spritesheet = Spritesheet('assets/images/earthP2.png')
+        self.earthP3_spritesheet = Spritesheet('assets/images/earthP3.png')
         self.player_spritesheet = Spritesheet('assets/images/player.png') 
         self.castlefloor_spritesheet = Spritesheet('assets/images/castlefloor.png') 
         self.factory_spritesheet = Spritesheet('assets/images/factory.png')
@@ -60,8 +62,9 @@ class Game:
         
         self.house = House(self, 7, 15, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
-        self.earthP1 = EarthP1(self, 5, 5, 70, 70)
-                
+        self.earthP1 = EarthP1(self, 1, 1, 40, 40)
+        self.earthP2 = EarthP2(self, 32, 2, 40, 40)
+        self.earthP3 = EarthP3(self, 28, 21, 40, 40)
             
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
