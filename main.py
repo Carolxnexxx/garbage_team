@@ -19,7 +19,11 @@ class Game:
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
-        self.house_spritesheet = Spritesheet('assets/images/house.png') 
+        self.housefence_spritesheet = Spritesheet('assets/images/housefence.png') 
+        self.wall_spritesheet = Spritesheet('assets/images/wall.png') 
+        self.doorP1_spritesheet = Spritesheet('assets/images/doorP1.png') 
+        self.doorP2_spritesheet = Spritesheet('assets/images/doorP2.png') 
+        self.doorP3_spritesheet = Spritesheet('assets/images/doorP3.png') 
         self.player_spritesheet = Spritesheet('assets/images/player.png') 
         self.running = True
 
