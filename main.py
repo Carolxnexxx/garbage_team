@@ -33,6 +33,9 @@ class Game:
         self.player_spritesheet = Spritesheet('assets/images/player.png') 
         self.castlefloor_spritesheet = Spritesheet('assets/images/castlefloor.png') 
         self.factory_spritesheet = Spritesheet('assets/images/factory.png')
+        self.bomb_tree_spritesheet = Spritesheet('assets/images/bomb_tree.png')
+        self.pine_tree_spritesheet = Spritesheet('assets/images/pine_tree.png')
+        self.fire_spritesheet = Spritesheet('assets/images/fire.png')  # Load fire image
         self.running = True
         self.trivia_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT)) 
         self.trivia_game = TriviaGame(self) 
@@ -60,19 +63,20 @@ class Game:
                     WoodDoor1(self, j, i, 0, 0)
                 elif column == "C":
                     CastleFloor(self, j, i,0,0)
-                #elif column == "H":
-                    #House(self, j, i, 0, 0)
+                elif column == "B":
+                    BombTree(self, j, i, 0, 0)
+                elif column == "T":
+                    PineTree(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self, j, i, 0, 0, self.trivia_game)
 
         
         self.house = House(self, 7, 15, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
+        self.fish = Fish(self, 22, 10, 0, 0)
         self.earthP1 = EarthP1(self, 1, 1, 40, 40)
         self.earthP2 = EarthP2(self, 32, 2, 40, 40)
         self.earthP3 = EarthP3(self, 28, 21, 40, 40)
-        self.fish = Fish(self, 22, 10, 0, 0)
-        self.earthP1 = EarthP1(self, 5, 5, 70, 70)
                 
             
     def create(self):
