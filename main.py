@@ -125,7 +125,7 @@ class Game:
                     self.state = "lore_screen"
             elif self.state == "lore_screen":
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                    self.state = "main_game"  # Transition to the main game when space is pressed
+                    self.state = "main_game" 
             elif self.state == "end_screen":
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     self.health_bar_height = 10
@@ -148,6 +148,14 @@ class Game:
         game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
         self.screen.blit(game_over_image, (0, 0))
         pygame.display.flip()
+
+    def draw_win_screen(self):
+        game_over_image = pygame.image.load("assets/images/winner.png")
+        game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
+        self.screen.blit(game_over_image, (0, 0))
+        pygame.display.flip()
+        pygame.time.wait(7000)
+        pygame.quit()
 
     def draw(self):
         self.screen.fill(RED) 
