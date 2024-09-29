@@ -22,14 +22,20 @@ class Game:
         self.clock = pygame.time.Clock()
         self.terrain_spritesheet = Spritesheet('assets/images/terrain.png') 
         self.house_spritesheet = Spritesheet('assets/images/house.png') 
+        self.fish_spritesheet = Spritesheet('assets/images/fish.png') 
         self.wall_spritesheet = Spritesheet('assets/images/wall.png') 
         self.doorP1_spritesheet = Spritesheet('assets/images/doorP1.png') 
         self.doorP2_spritesheet = Spritesheet('assets/images/doorP2.png') 
         self.doorP3_spritesheet = Spritesheet('assets/images/doorP3.png') 
         self.earthP1_spritesheet = Spritesheet('assets/images/earthP1.png')
+        self.earthP2_spritesheet = Spritesheet('assets/images/earthP2.png')
+        self.earthP3_spritesheet = Spritesheet('assets/images/earthP3.png')
         self.player_spritesheet = Spritesheet('assets/images/player.png') 
         self.castlefloor_spritesheet = Spritesheet('assets/images/castlefloor.png') 
         self.factory_spritesheet = Spritesheet('assets/images/factory.png')
+        self.bomb_tree_spritesheet = Spritesheet('assets/images/bomb_tree.png')
+        self.pine_tree_spritesheet = Spritesheet('assets/images/pine_tree.png')
+        self.fire_spritesheet = Spritesheet('assets/images/fire.png')  # Load fire image
         self.running = True
         self.trivia_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT)) 
         self.trivia_game = TriviaGame(self) 
@@ -70,15 +76,20 @@ class Game:
                     WoodDoor1(self, j, i, 0, 0)
                 elif column == "C":
                     CastleFloor(self, j, i,0,0)
-                elif column == "H":
-                    House(self, j, i, 0, 0)
+                elif column == "B":
+                    BombTree(self, j, i, 0, 0)
+                elif column == "T":
+                    PineTree(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self, j, i, 0, 0, self.trivia_game)
 
         
         self.house = House(self, 7, 15, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
-        self.earthP1 = EarthP1(self, 5, 5, 70, 70)
+        self.fish = Fish(self, 22, 10, 0, 0)
+        self.earthP1 = EarthP1(self, 1, 1, 40, 40)
+        self.earthP2 = EarthP2(self, 32, 2, 40, 40)
+        self.earthP3 = EarthP3(self, 28, 21, 40, 40)
                 
             
     def create(self):

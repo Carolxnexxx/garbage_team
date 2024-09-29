@@ -37,6 +37,46 @@ class Ground(pygame.sprite.Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
 
+class BombTree(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = GROUND_LAYER
+        self.groups = self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        self.image = self.game.bomb_tree_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+    def transform_to_fire(self):
+        fire_image = self.game.fire_spritesheet.get_image(0, 0, self.width, self.height)  
+        self.image = fire_image
+
+class PineTree(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = GROUND_LAYER
+        self.groups = self.game.all_sprites, self.game.blocks
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        self.image = self.game.pine_tree_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
+
 class House(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
@@ -79,7 +119,7 @@ class Factory(pygame.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
-class Factory(pygame.sprite.Sprite):
+class Fish(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = HOUSE_LAYER
@@ -91,7 +131,7 @@ class Factory(pygame.sprite.Sprite):
 
         scale_factor = 2.5
 
-        self.image = self.game.factory_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.image = self.game.fish_spritesheet.get_image(img_x, img_y, self.width, self.height)
 
         self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
 
@@ -201,10 +241,10 @@ class EarthP1(pygame.sprite.Sprite):
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.width = TILESIZE
-        self.height = TILESIZE
+        self.width = 150
+        self.height = 150
 
-        scale_factor = 2 # Adjust scale factor for better visibility
+        scale_factor = 1.5 # Adjust scale factor for better visibility
 
         self.image = self.game.earthP1_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
@@ -213,6 +253,43 @@ class EarthP1(pygame.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
+class EarthP2(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = PLAYER_LAYER + 1
+        self.groups = self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.width = 150
+        self.height = 150
+
+        scale_factor = 1.5 # Adjust scale factor for better visibility
+
+        self.image = self.game.earthP2_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
+
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+class EarthP3(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = PLAYER_LAYER + 1
+        self.groups = self.game.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.width = 150
+        self.height = 150
+
+        scale_factor = 1.5 # Adjust scale factor for better visibility
+
+        self.image = self.game.earthP3_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
+
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y, trivia_game):
@@ -267,11 +344,50 @@ class Player(pygame.sprite.Sprite):
 
     def collide_block(self):
         pressed = pygame.key.get_pressed()
-        collide = pygame.sprite.spritecollide(self, self.game.blocks, False, pygame.sprite.collide_rect_ratio(0.85) ) # important
-        if collide:
+        
+        # Check collision with blocks
+        collide = pygame.sprite.spritecollide(self, self.game.blocks, False, 
+                                            pygame.sprite.collide_rect_ratio(0.85))  
+        
+        # Check collision with BombTree specifically
+        bomb_tree_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                                        pygame.sprite.collide_rect_ratio(0.85))
+        
+        pine_tree_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                                        pygame.sprite.collide_rect_ratio(0.85))
+
+        for sprite in bomb_tree_collide:
+            if isinstance(sprite, BombTree):
+                sprite.transform_to_fire()  # Transform the tree into fire
+
+                if pressed[pygame.K_LEFT]:                    
+                    self.rect.x += PLAYER_STEPS
+                elif pressed[pygame.K_RIGHT]:
+                    self.rect.x -= PLAYER_STEPS
+                elif pressed[pygame.K_UP]:
+                    self.rect.y += PLAYER_STEPS
+                elif pressed[pygame.K_DOWN]:
+                    self.rect.y -= PLAYER_STEPS
+                return  # Exit after processing the collision
+        
+        for sprite in pine_tree_collide:
+            if isinstance(sprite, PineTree):
+                if pressed[pygame.K_LEFT]:                    
+                    self.rect.x += PLAYER_STEPS
+                elif pressed[pygame.K_RIGHT]:
+                    self.rect.x -= PLAYER_STEPS
+                elif pressed[pygame.K_UP]:
+                    self.rect.y += PLAYER_STEPS
+                elif pressed[pygame.K_DOWN]:
+                    self.rect.y -= PLAYER_STEPS
+                return  # Exit after processing the collision
+        
+        for sprite in collide:
             self.game.increase_health()
-            self.trivia_game.draw_question()
-            if pressed[pygame.K_LEFT]:
+            self.trivia_game.draw_question()  # Call the trivia game
+            
+            # Prevent player from moving into the bomb tree
+            if pressed[pygame.K_LEFT]:                    
                 self.rect.x += PLAYER_STEPS
             elif pressed[pygame.K_RIGHT]:
                 self.rect.x -= PLAYER_STEPS
@@ -279,6 +395,9 @@ class Player(pygame.sprite.Sprite):
                 self.rect.y += PLAYER_STEPS
             elif pressed[pygame.K_DOWN]:
                 self.rect.y -= PLAYER_STEPS
+            return  # Exit after processing the collision
+
+
 
 
 questions = [
@@ -288,7 +407,7 @@ questions = [
             "1. Natural gas",
             "2. Nuclear",
             "3. Coal",
-            "4. Hydroelectricity"
+            "4. Hydro electricity"
         ],
         "answer": 4
     },
