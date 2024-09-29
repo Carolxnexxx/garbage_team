@@ -19,13 +19,19 @@ class Key1(pygame.sprite.Sprite):
 
         scale_factor = 2.5
 
+        # Load and scale the key image
         self.image = self.game.key1_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
 
         self.rect = self.image.get_rect()
-
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+    def update(self):
+        # Check if the fishKey is False, and remove the key if needed
+        if fishKey == True:
+            self.kill()
+
 
 class Key2(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
@@ -39,13 +45,18 @@ class Key2(pygame.sprite.Sprite):
 
         scale_factor = 2.5
 
+        # Load and scale the key image
         self.image = self.game.key2_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
 
         self.rect = self.image.get_rect()
-
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+    def update(self):
+        # Check if the fishKey is False, and remove the key if needed
+        if factoryKey == True:
+            self.kill()
 
 class Key3(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
@@ -59,13 +70,18 @@ class Key3(pygame.sprite.Sprite):
 
         scale_factor = 2.5
 
+        # Load and scale the key image
         self.image = self.game.key3_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
 
         self.rect = self.image.get_rect()
-
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+    def update(self):
+        # Check if the fishKey is False, and remove the key if needed
+        if houseKey == True:
+            self.kill()
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
