@@ -400,6 +400,9 @@ class Player(pygame.sprite.Sprite):
                 sprite.kill()
                 self.puzzle += 1
                 print(f"Puzzle pieces collected: {self.puzzle}")
+                if self.puzzle == 3:
+                    self.display_winner_screen()
+                    return
                 return
 
         for sprite in garbage_collide:
@@ -452,6 +455,18 @@ class Player(pygame.sprite.Sprite):
             elif pressed[pygame.K_DOWN]:
                 self.rect.y -= PLAYER_STEPS
             return  # Exit after processing the collision
+    
+    def display_winner_screen(self):
+        font = pygame.font.SysFont('Arial', 80)
+        text = font.render("You Won!", True, BLACK)
+        self.game.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+
+        # Update display and wait for 3 seconds
+        pygame.display.flip()
+        pygame.time.wait(3000)
+
+        # After displaying the "You Won" screen, you can quit the game
+        pygame.quit()
 
 questions = [
     {
