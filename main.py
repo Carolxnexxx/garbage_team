@@ -34,6 +34,19 @@ class Game:
         self.trivia_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT)) 
         self.trivia_game = TriviaGame(self) 
 
+        # Temperature/health Bar
+        self.health_bar_height = 10  # Initial temperature
+        self.health_bar_max_height = 70  # Max height of the health bar
+        self.health_bar_width = 15  # Width of the health bar
+        self.health_bar_x = WIN_WIDTH - 50  # Position of the bar (right side of the screen)
+        self.health_bar_y = 20  # Y position based on max height
+    def increase_health(self):
+        if self.health_bar_height + 10 <= self.health_bar_max_height:
+            self.health_bar_height += 10
+        else:
+            self.health_bar_height = self.health_bar_max_height
+
+
     def createTileMap(self):
         for i, row in enumerate(tilemap):
             for j, column in enumerate(row):
@@ -84,6 +97,17 @@ class Game:
     def draw(self):
         self.screen.fill(RED) 
         self.all_sprites.draw(self.screen)
+
+        # Temperature/Health bar
+        pygame.draw.rect(self.screen, WHITE, (self.health_bar_x, self.health_bar_y, self.health_bar_width, self.health_bar_max_height))
+        fill_y = self.health_bar_y + (self.health_bar_max_height - self.health_bar_height)
+        pygame.draw.rect(self.screen, RED, (self.health_bar_x, fill_y, self.health_bar_width, self.health_bar_height))
+
+        # Game Over
+        if self.health_bar_height >= self.health_bar_max_height:
+            print("Game Over")
+            self.running = False
+
         self.clock.tick(FPS)
         pygame.display.update()
     

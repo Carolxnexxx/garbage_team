@@ -269,6 +269,7 @@ class Player(pygame.sprite.Sprite):
         pressed = pygame.key.get_pressed()
         collide = pygame.sprite.spritecollide(self, self.game.blocks, False, pygame.sprite.collide_rect_ratio(0.85) ) # important
         if collide:
+            self.game.increase_health()
             self.trivia_game.draw_question()
             if pressed[pygame.K_LEFT]:
                 self.rect.x += PLAYER_STEPS
