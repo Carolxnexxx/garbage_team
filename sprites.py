@@ -260,25 +260,21 @@ class CastleFloor(pygame.sprite.Sprite):  # Wall of the puzzle domains
 class EarthP1(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
-        self._layer = PLAYER_LAYER + 1
+        self._layer = PLAYER_LAYER + 1  # Adjust layer to ensure visibility
         self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.width = 150
-        self.height = 150
-        scale_factor = 1.5
+        self.width = 90
+        self.height = 80
+
+        scale_factor = 1.5 # Adjust scale factor for better visibility
 
         self.image = self.game.earthP1_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
 
         self.rect = self.image.get_rect()
-        # Manually shrink the hitbox by adjusting rect size or position
-        self.rect.width = int(self.rect.width * 0.85)  # Shrink width by 15%
-        self.rect.height = int(self.rect.height * 0.85)  # Shrink height by 15%
-
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
 
 class EarthP2(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
@@ -287,10 +283,10 @@ class EarthP2(pygame.sprite.Sprite):
         self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.width = 150
-        self.height = 150
+        self.width = 100
+        self.height = 80
 
-        scale_factor = 1.5 # Adjust scalclass Eae factor for better visibility
+        scale_factor = 1.5 # Adjust scale factor for better visibility
 
         self.image = self.game.earthP2_spritesheet.get_image(img_x, img_y, self.width, self.height)
         self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
@@ -306,8 +302,8 @@ class EarthP3(pygame.sprite.Sprite):
         self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.width = 150
-        self.height = 150
+        self.width = 100
+        self.height = 100
 
         scale_factor = 1.5 # Adjust scale factor for better visibility
 
