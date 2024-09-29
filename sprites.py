@@ -639,10 +639,10 @@ questions = {
         {
             "question": "What is biomass? What can it be used for?",
             "options": [
-                "1) Organic material from plants and animals that can be burned for heat or converted to liquid and gaseous fuels.",
-                "2) Biomass is a fashion trend involving clothing made exclusively from recycled plastic.",
-                "3) Biomass is a type of plastic used to make disposable utensils.",
-                "4) Biomass refers to a method of creating electricity using solar panels."
+                "1) Organic material from plants and animals that can be burned",
+                "2) Biomass is a fashion trend",
+                "3) Biomass is a type of plastic",
+                "4) Biomass refers to a method of creating electricity using solar panels"
             ],
             "answer": 1
         },
@@ -739,7 +739,7 @@ class TriviaGame:
 
         while font_size > 10:  # Set a minimum font size
             font = pygame.font.SysFont('Arial', font_size)
-            wrapped_text = self.wrap_text(text, font, max_width)
+            wrapped_text = self.wrap_text(text, font, max_width * 0.85)
         
         # Check if the total height of the wrapped text fits in the surface height
             total_height = sum(font.get_height() for _ in wrapped_text)
@@ -770,10 +770,13 @@ class TriviaGame:
                 print("self current question < len quesitons")
                 print(self.current_question)
                 question_data = questions[category][self.current_question]
-
-                quiz_surface = pygame.Surface((640, 480))  
-                quiz_surface.fill(WHITE)
-                self.game.screen.blit(quiz_surface, (100, 60))  # Position the quiz box
+                
+                image_path = 'assets/images/pixil-frame-0.png'
+                original_image = pygame.image.load(image_path)
+                quiz_surface = pygame.Surface((640, 480))
+                quiz_surface.fill(WHITE) 
+                quiz_surface.blit(original_image, (0, 0))
+                self.game.screen.blit(quiz_surface, (100, 60))
 
             # Render the question
                 question_font, wrapped_question = self.adjust_font(question_data["question"], 600)
@@ -789,10 +792,10 @@ class TriviaGame:
                 option_y = y_offset + 20  # Start options below the question
                 for i, option in enumerate(question_data["options"]):
                     option_font, wrapped_option = self.adjust_font(option, 550)
-
+                    x_pos=160
                     for line in wrapped_option:
                         option_text = option_font.render(line, True, BLACK)
-                        option_rect = option_text.get_rect(topleft=(120, option_y))  # Adjust the y-position
+                        option_rect = option_text.get_rect(topleft=(x_pos, option_y))  # Adjust the y-position
                         self.game.screen.blit(option_text, option_rect)
                         option_y += option_font.get_height()  # Move down for the next line
 
@@ -866,8 +869,11 @@ class TriviaGame:
                 factoryKey = True
         else:
             print("try again")
+        image_path = 'assets/images/pixil-frame-0.png'
+        original_image = pygame.image.load(image_path)
         quiz_surface = pygame.Surface((640, 480))
         quiz_surface.fill(WHITE) 
+        quiz_surface.blit(original_image, (0, 0))
         self.game.screen.blit(quiz_surface, (100, 60))
         score_text = self.font.render(f"Your Score: {self.score}/{len(questions)}", True, BLACK)
         self.game.screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2))
