@@ -60,6 +60,12 @@ class Game:
         else:
             self.health_bar_height = self.health_bar_max_height
 
+    def decrease_health(self):
+        if self.health_bar_height -5 <= self.health_bar_max_height:
+            self.health_bar_height -= 5
+        else:
+            self.health_bar_height = 0   
+
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
