@@ -565,7 +565,7 @@ questions = {
     ]
 }
 
-FONT_SIZE = 40
+FONT_SIZE = 30
 WIDTH, HEIGHT = 800, 600
 
 class TriviaGame:
@@ -573,24 +573,81 @@ class TriviaGame:
         self.game = game
         self.current_question = 0
         self.score = 0
-        self.font = pygame.font.SysFont('Arial', FONT_SIZE)
+        self.initial_font_size = FONT_SIZE
+        self.font = pygame.font.SysFont('Arial', self.initial_font_size)
+    
+    def wrap_text(self, text, font, max_width):
+        words = text.split(' ')
+        lines = []
+        current_line = ""
 
+        for word in words:
+            test_line = current_line + word + ' '
+            width, _ = font.size(test_line)
+
+            if width <= max_width:
+                current_line = test_line  # If it fits, add the word
+            else:
+                lines.append(current_line.strip())
+                current_line = word + ' '
+        if current_line:
+            lines.append(current_line.strip())
+
+        return lines
+
+    def adjust_font(self, text, max_width):
+        font_size = self.initial_font_size
+        
+        wrapped_text = []
+
+        while font_size > 10:  # Set a minimum font size
+            font = pygame.font.SysFont('Arial', font_size)
+            wrapped_text = self.wrap_text(text, font, max_width)
+        
+        # Check if the total height of the wrapped text fits in the surface height
+            total_height = sum(font.get_height() for _ in wrapped_text)
+
+            if total_height <= 450:  # Check against your surface height
+                return font, wrapped_text  # Return the fitting font and wrapped text
+            font_size -= 1  # Decrease font size
+            
+        return pygame.font.SysFont('Arial', 10), self.wrap_text(text, pygame.font.SysFont('Arial', 10), max_width)
+            
+    
     def draw_question(self, category):
         if category in questions:
             if self.current_question < len(questions):
                 question_data = questions[category][self.current_question]
-            self.game.screen.fill(WHITE)
-            question_text = self.font.render(question_data["question"], True, BLACK)
-            self.game.screen.blit(question_text, (50, 50))
 
-            for i, option in enumerate(question_data["options"]):
-                option_text = self.font.render(option, True, BLACK)
-                self.game.screen.blit(option_text, (50, 150 + i * 50))
+                quiz_surface = pygame.Surface((640, 480))  
+                quiz_surface.fill(WHITE)
+                self.game.screen.blit(quiz_surface, (100, 60))  # Position the quiz box
 
-            pygame.display.flip()
-            self.wait_for_answer(category)
-        else:
-            self.display_final_score(category)
+            # Render the question
+                question_font, wrapped_question = self.adjust_font(question_data["question"], 600)
+                y_offset = 120
+
+                for line in wrapped_question:
+                    question_text = question_font.render(line, True, BLACK)
+                    question_rect = question_text.get_rect(center=(400, y_offset))  # Center the line
+                    self.game.screen.blit(question_text, question_rect)
+                    y_offset += question_font.get_height()  # Move down for the next line
+
+            # Render the options
+                option_y = y_offset + 20  # Start options below the question
+                for i, option in enumerate(question_data["options"]):
+                    option_font, wrapped_option = self.adjust_font(option, 550)
+
+                    for line in wrapped_option:
+                        option_text = option_font.render(line, True, BLACK)
+                        option_rect = option_text.get_rect(topleft=(120, option_y))  # Adjust the y-position
+                        self.game.screen.blit(option_text, option_rect)
+                        option_y += option_font.get_height()  # Move down for the next line
+
+                pygame.display.flip()
+                self.wait_for_answer(category)
+            else:
+                self.display_final_score(category)
 
     def wait_for_answer(self, category):
         waiting = True
@@ -613,4 +670,4 @@ class TriviaGame:
         score_text = self.font.render(f"Your Score: {self.score}/{len(questions)}", True, BLACK)
         self.game.screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2))
         pygame.display.flip()
-        pygame.time.wait(100)
+        pygame.time.wait(3000)
