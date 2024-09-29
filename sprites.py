@@ -38,6 +38,8 @@ class Ground(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
+    
+    
 
 class BombTree(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
@@ -78,6 +80,28 @@ class PineTree(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
+
+class Garbage(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = GROUND_LAYER
+        self.groups = self.game.all_sprites, self.game.blocks
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        self.image = self.game.garbage_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+    def transform_to_grass(self):
+        grass_image = self.game.grass_spritesheet.get_image(0, 0, self.width, self.height)  
+        self.image = grass_image
 
 class House(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
@@ -349,7 +373,7 @@ class Player(pygame.sprite.Sprite):
     def collide_block(self):
         pressed = pygame.key.get_pressed()
         
-        # Check collision with blocks
+        # Check collision with 
         collide = pygame.sprite.spritecollide(self, self.game.blocks, False, 
                                             pygame.sprite.collide_rect_ratio(0.85))  
         
@@ -359,6 +383,14 @@ class Player(pygame.sprite.Sprite):
         
         pine_tree_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
                                                         pygame.sprite.collide_rect_ratio(0.85))
+    
+        garbage_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                              pygame.sprite.collide_rect_ratio(0.85))
+
+        for sprite in garbage_collide:
+            if isinstance(sprite, Garbage):
+                sprite.transform_to_grass()
+                return  
 
         for sprite in bomb_tree_collide:
             if isinstance(sprite, BombTree):
@@ -402,8 +434,6 @@ class Player(pygame.sprite.Sprite):
             elif pressed[pygame.K_DOWN]:
                 self.rect.y -= PLAYER_STEPS
             return  # Exit after processing the collision
-
-
 
 
 questions = [
