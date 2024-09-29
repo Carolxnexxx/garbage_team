@@ -104,8 +104,8 @@ class Game:
         self.fish = Fish(self, 22, 10, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
         self.fish = Fish(self, 22, 10, 0, 0)
-        self.earthP1 = EarthP1(self, 1, 1, 40, 40)
-        self.earthP2 = EarthP2(self, 32, 2, 40, 40)
+        self.earthP1 = EarthP1(self, 1, 1, 0, 0)
+        self.earthP2 = EarthP2(self, 32, 6, 0, 0)
         self.earthP3 = EarthP3(self, 31, 21, 0, 0)
                 
     def create(self):
