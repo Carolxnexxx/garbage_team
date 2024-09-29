@@ -467,8 +467,8 @@ class Player(pygame.sprite.Sprite):
     
     def display_winner_screen(self):
         font = pygame.font.SysFont('Arial', 80)
-        # text = font.render("You Won!", True, BLACK)
-        # self.game.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+        text = font.render("You Won!", True, BLACK)
+        self.game.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
 
         # Update display and wait for 3 seconds
         pygame.display.flip()
