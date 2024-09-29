@@ -30,6 +30,9 @@ class Game:
         self.player_spritesheet = Spritesheet('assets/images/player.png') 
         self.castlefloor_spritesheet = Spritesheet('assets/images/castlefloor.png') 
         self.factory_spritesheet = Spritesheet('assets/images/factory.png')
+        self.earthP2_spritesheet = Spritesheet('assets/images/earthP2.png')
+        self.earthP3_spritesheet = Spritesheet('assets/images/earthP3.png')
+        self.fish_spritesheet = Spritesheet('assets/images/fish.png')
         self.running = True
         self.trivia_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT)) 
         self.trivia_game = TriviaGame(self) 
@@ -64,9 +67,12 @@ class Game:
 
         
         self.house = House(self, 7, 15, 0, 0)
+        self.fish = Fish(self, 22, 10, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
         self.earthP1 = EarthP1(self, 5, 5, 70, 70)
-                
+        self.earthP2 = EarthP2(self, 32, 2, 40, 40)
+        self.earthP3 = EarthP3(self, 28, 21, 40, 40)
+
             
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
