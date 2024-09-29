@@ -262,7 +262,7 @@ class EarthP1(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = PLAYER_LAYER + 1  # Adjust layer to ensure visibility
-        self.groups = self.game.all_sprites
+        self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.width = 150
@@ -281,7 +281,7 @@ class EarthP2(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = PLAYER_LAYER + 1
-        self.groups = self.game.all_sprites
+        self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.width = 150
@@ -300,7 +300,7 @@ class EarthP3(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = PLAYER_LAYER + 1
-        self.groups = self.game.all_sprites
+        self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.width = 150
@@ -334,6 +334,8 @@ class Player(pygame.sprite.Sprite):
 
         self.health_increased = False
         self.health_decreased = False
+
+        self.puzzle = 0
 
         # Load the player image from the spritesheet using the provided coordinates
         self.image = self.game.player_spritesheet.get_image(0, 0, self.width, self.height)
@@ -385,6 +387,20 @@ class Player(pygame.sprite.Sprite):
     
         garbage_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
                                               pygame.sprite.collide_rect_ratio(0.85))
+        
+        puzzle_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                              pygame.sprite.collide_rect_ratio(0.85))
+        
+        door_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                              pygame.sprite.collide_rect_ratio(0.85))
+
+
+        for sprite in puzzle_collide:
+            if isinstance(sprite, (EarthP1, EarthP2, EarthP3)):
+                sprite.kill()
+                self.puzzle += 1
+                print(f"Puzzle pieces collected: {self.puzzle}")
+                return
 
         for sprite in garbage_collide:
             if isinstance(sprite, Garbage):

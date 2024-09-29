@@ -123,7 +123,7 @@ class Game:
     def draw_start_screen(self):
         self.screen.fill(WHITE)
         font = pygame.font.Font(None, 74)
-        title_text = font.render("Press SPACE to Start", True, BLACK)
+        title_text = font.render("Garbage Game\nPress SPACE to Start", True, BLACK)
         self.screen.blit(title_text, (WIN_WIDTH // 2 - title_text.get_width() // 2, WIN_HEIGHT // 2 - title_text.get_height() // 2))
         pygame.display.flip()
 
