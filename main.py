@@ -35,6 +35,9 @@ class Game:
         self.player_spritesheet = Spritesheet('assets/images/player.png') 
         self.castlefloor_spritesheet = Spritesheet('assets/images/castlefloor.png') 
         self.factory_spritesheet = Spritesheet('assets/images/factory.png')
+        self.earthP2_spritesheet = Spritesheet('assets/images/earthP2.png')
+        self.earthP3_spritesheet = Spritesheet('assets/images/earthP3.png')
+        self.fish_spritesheet = Spritesheet('assets/images/fish.png')
         self.bomb_tree_spritesheet = Spritesheet('assets/images/bomb_tree.png')
         self.pine_tree_spritesheet = Spritesheet('assets/images/pine_tree.png')
         self.garbage_spritesheet = Spritesheet('assets/images/garbage.png')
@@ -98,6 +101,7 @@ class Game:
                     self.player = Player(self, j, i, 0, 0, self.trivia_game)
 
         self.house = House(self, 7, 15, 0, 0)
+        self.fish = Fish(self, 22, 10, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
         self.fish = Fish(self, 22, 10, 0, 0)
         self.earthP1 = EarthP1(self, 1, 1, 40, 40)
