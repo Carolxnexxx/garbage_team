@@ -646,7 +646,7 @@ class TriviaGame:
                 pygame.display.flip()
                 self.wait_for_answer(category)
             else:
-                self.display_final_score(category)
+                self.display_final_score()
 
     def wait_for_answer(self, category):
         waiting = True
@@ -657,11 +657,38 @@ class TriviaGame:
                 if event.type == pygame.KEYDOWN:
                     if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]:
                         selected_answer = event.key - pygame.K_0
-                        if selected_answer == questions[category][self.current_question]["answer"]:
+                        correct_answer = questions[category][self.current_question]["answer"]
+
+                        if selected_answer == correct_answer:
                             self.score += 1
+                            feedback_text = "Correct!"
+                        else:
+                            feedback_text = "Incorrect, Correct answer is number " + str(correct_answer)
+                                
+
+                        self.display_feedback(feedback_text)  # Display feedback
+
+                        # Increment question only if there are more questions
                         self.current_question += 1
-                        waiting = False
-                        self.draw_question(category)
+                        if self.current_question < len(questions[category]):
+                            self.draw_question(category)
+                        else:
+                            self.display_final_score()
+
+                    waiting = False       
+    
+    def display_feedback(self, feedback_text):
+        feedback_area = pygame.Surface((6, 45))  # Adjust size based on your needs
+        feedback_area.fill(WHITE)  # Fill with the background color
+        self.game.screen.blit(feedback_area, (100, 300))  # Position the feedback area
+
+        feedback_font = pygame.font.SysFont('Arial', 30)
+        feedback_surface = feedback_font.render(feedback_text, True, BLACK)
+        feedback_rect = feedback_surface.get_rect(center=(400, 80))  # Center in the feedback area
+        self.game.screen.blit(feedback_surface, feedback_rect)
+
+        pygame.display.flip()  # Update the display
+        pygame.time.wait(1000)
 
 
     def display_final_score(self):

@@ -3,9 +3,6 @@ import sys
 import pygame
 from sprites import *
 pygame.font.init()
-pygame.init()
-
-pygame.display.set_caption("Garbage Game")
 
 class Spritesheet:
     def __init__(self, path):
@@ -14,6 +11,7 @@ class Spritesheet:
         sprite = pygame.Surface([width, height], pygame.SRCALPHA)  # Allows transparency
         sprite.blit(self.spritesheet, (0, 0), (x, y, width, height))
         sprite.set_colorkey(RED) 
+        
         return sprite
 
 class Game:
@@ -62,11 +60,6 @@ class Game:
         else:
             self.health_bar_height = self.health_bar_max_height
 
-    def decrease_health(self):
-        if self.health_bar_height-5 >= 0:
-            self.health_bar_height -= 5
-        else:
-            self.health_bar_height = 0
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
@@ -100,6 +93,7 @@ class Game:
                 elif column == "P":
                     self.player = Player(self, j, i, 0, 0, self.trivia_game)
 
+        
         self.house = House(self, 7, 15, 0, 0)
         self.fish = Fish(self, 22, 10, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
@@ -108,6 +102,7 @@ class Game:
         self.earthP2 = EarthP2(self, 32, 6, 0, 0)
         self.earthP3 = EarthP3(self, 31, 21, 0, 0)
                 
+            
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.blocks = pygame.sprite.LayeredUpdates() # important for collision
@@ -169,10 +164,11 @@ class Game:
         # Game Over
         if self.health_bar_height >= self.health_bar_max_height:
             print("Game Over")
-            self.state = "end_screen" 
+            self.running = False
 
+        self.clock.tick(FPS)
         pygame.display.update()
-
+    
     def main(self):
         while self.running:
             self.events()
@@ -186,7 +182,6 @@ class Game:
             elif self.state == "end_screen":
                 self.draw_end_screen()
 
-# Run the game
 game = Game()
 game.create()
 
