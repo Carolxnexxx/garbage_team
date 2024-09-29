@@ -119,12 +119,21 @@ class Game:
             if self.state == "start_screen":
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     self.state = "main_game"  # Transition to the main game when space is pressed
+            if self.state == "end_screen":
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.health_bar_height = 10
+                    self.state = "main_game"
 
     def draw_start_screen(self):
-        self.screen.fill(WHITE)
-        font = pygame.font.Font(None, 74)
-        title_text = font.render("Garbage Game\nPress SPACE to Start", True, BLACK)
-        self.screen.blit(title_text, (WIN_WIDTH // 2 - title_text.get_width() // 2, WIN_HEIGHT // 2 - title_text.get_height() // 2))
+        game_over_image = pygame.image.load("assets/images/start.png")
+        game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
+        self.screen.blit(game_over_image, (0, 0))
+        pygame.display.flip()
+    
+    def draw_end_screen(self):
+        game_over_image = pygame.image.load("assets/images/gameover.png")
+        game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
+        self.screen.blit(game_over_image, (0, 0))
         pygame.display.flip()
 
     def draw(self):
@@ -139,7 +148,7 @@ class Game:
         # Game Over
         if self.health_bar_height >= self.health_bar_max_height:
             print("Game Over")
-            self.running = False
+            self.state = "end_screen" 
 
         pygame.display.update()
 
@@ -151,6 +160,8 @@ class Game:
             elif self.state == "main_game":
                 self.update()
                 self.draw()
+            elif self.state == "end_screen":
+                self.draw_end_screen()
 
 # Run the game
 game = Game()
