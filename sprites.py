@@ -2,6 +2,10 @@ from configuration import *
 import pygame
 
 global crash
+key = "none"
+fishKey = False
+houseKey = False
+factoryKey = False
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
@@ -617,8 +621,20 @@ class TriviaGame:
             
     
     def draw_question(self, category):
+        global key
+        print(key)
         if category in questions:
             print("Category in questions")
+            print(category)
+            if category == "Fish: pH Levels of the Water, Declining Fish, Water and Climate Change":
+                key = "fish"
+                print("yess",key)
+            elif category == "Factory: Greenhouse Gas Emissions & CO2 Emissions":
+                key = "factory"
+                print("yess",key)
+            elif category == "House: Renewables & Recycling":
+                key = "house"
+                print("yess",key)
             if self.current_question < len(questions):
                 print("self current question < len quesitons")
                 print(self.current_question)
@@ -701,8 +717,25 @@ class TriviaGame:
 
 
     def display_final_score(self):
+        global fishKey
+        global houseKey
+        global factoryKey
+        if self.score == 3:
+            print("KEY UNLOCKED:",key)
+            if key == "fish":
+                print("key is fish")
+                fishKey = True
+            elif key == "house":
+                print("key is house")
+                houseKey = True
+            elif key == "factory":
+                print("key is factory")
+                factoryKey = True
+        else:
+            print("try again")
         self.game.screen.fill(WHITE)
         score_text = self.font.render(f"Your Score: {self.score}/{len(questions)}", True, BLACK)
         self.game.screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2))
         pygame.display.flip()
+        self.score = 0
         pygame.time.wait(3000)
