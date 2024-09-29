@@ -72,7 +72,6 @@ class Game:
         self.earthP2 = EarthP2(self, 32, 2, 40, 40)
         self.earthP3 = EarthP3(self, 28, 21, 40, 40)
         self.fish = Fish(self, 22, 10, 0, 0)
-        self.earthP1 = EarthP1(self, 5, 5, 70, 70)
                 
             
     def create(self):
