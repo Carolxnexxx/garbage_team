@@ -12,6 +12,9 @@ GROUND_LAYER = 1
 
 PLAYER_STEPS = 3
 
+START_SCREEN = 'start_screen'
+MAIN_GAME = 'main_game'
+
 RED = (227, 145, 145)
 GREEN = (145, 227, 152)
 WHITE = (255, 255, 255)

@@ -323,11 +323,11 @@ class Player(pygame.sprite.Sprite):
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.x = x * 30
-        self.y = y * 30
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
 
-        self.width = 30
-        self.height = 30
+        self.width = TILESIZE
+        self.height = TILESIZE
 
         self.x_change = 0
         self.y_change = 0
