@@ -1,6 +1,8 @@
 from configuration import *
 import pygame
 
+global crash
+
 class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
@@ -37,8 +39,6 @@ class Ground(pygame.sprite.Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
     
-    
-
 class BombTree(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
@@ -261,7 +261,7 @@ class EarthP1(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = PLAYER_LAYER + 1  # Adjust layer to ensure visibility
-        self.groups = self.game.all_sprites
+        self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.width = 150
@@ -280,7 +280,7 @@ class EarthP2(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = PLAYER_LAYER + 1
-        self.groups = self.game.all_sprites
+        self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.width = 150
@@ -299,7 +299,7 @@ class EarthP3(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
         self._layer = PLAYER_LAYER + 1
-        self.groups = self.game.all_sprites
+        self.groups = self.game.all_sprites, self.game.blocks
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.width = 150
@@ -322,14 +322,19 @@ class Player(pygame.sprite.Sprite):
         self.groups = self.game.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.x = x * 30
-        self.y = y * 30
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
 
-        self.width = 30
-        self.height = 30
+        self.width = TILESIZE
+        self.height = TILESIZE
 
         self.x_change = 0
         self.y_change = 0
+
+        self.health_increased = False
+        self.health_decreased = False
+
+        self.puzzle = 0
 
         # Load the player image from the spritesheet using the provided coordinates
         self.image = self.game.player_spritesheet.get_image(0, 0, self.width, self.height)
@@ -391,18 +396,34 @@ class Player(pygame.sprite.Sprite):
         
         bomb_tree_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, pygame.sprite.collide_rect_ratio(0.85))
         pine_tree_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, pygame.sprite.collide_rect_ratio(0.85))
-        garbage_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, pygame.sprite.collide_rect_ratio(0.85))                                    
+        garbage_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, pygame.sprite.collide_rect_ratio(0.85))
+        puzzle_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                              pygame.sprite.collide_rect_ratio(0.85))
+        door_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                              pygame.sprite.collide_rect_ratio(0.85))
+
+
+        for sprite in puzzle_collide:
+            if isinstance(sprite, (EarthP1, EarthP2, EarthP3)):
+                sprite.kill()
+                self.puzzle += 1
+                print(f"Puzzle pieces collected: {self.puzzle}")
+                return
 
         for sprite in garbage_collide:
             if isinstance(sprite, Garbage):
-                sprite.transform_to_grass()
+                if not self.health_decreased:
+                    sprite.transform_to_grass()
+                    self.game.decrease_health()
+                    self.health_decreased = True
                 return  
 
         for sprite in bomb_tree_collide:
             if isinstance(sprite, BombTree):
-                sprite.transform_to_fire()  # Transform the tree into fire
-                self.game.increase_health()
-
+                if not self.health_increased:  # Only increase health once per collision
+                    sprite.transform_to_fire()  # Transform the tree into fire
+                    self.game.increase_health()
+                    self.health_increased = True
                 if pressed[pygame.K_LEFT]:                    
                     self.rect.x += PLAYER_STEPS
                 elif pressed[pygame.K_RIGHT]:
@@ -412,7 +433,8 @@ class Player(pygame.sprite.Sprite):
                 elif pressed[pygame.K_DOWN]:
                     self.rect.y -= PLAYER_STEPS
                 return  # Exit after processing the collision
-        
+        self.health_increased = False
+        self.health_decreased = False
         for sprite in pine_tree_collide:
             if isinstance(sprite, PineTree):
                 if pressed[pygame.K_LEFT]:                    
@@ -591,4 +613,4 @@ class TriviaGame:
         score_text = self.font.render(f"Your Score: {self.score}/{len(questions)}", True, BLACK)
         self.game.screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2))
         pygame.display.flip()
-        pygame.time.wait(3000)
+        pygame.time.wait(100)

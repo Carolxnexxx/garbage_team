@@ -3,6 +3,9 @@ import sys
 import pygame
 from sprites import *
 pygame.font.init()
+pygame.init()
+
+pygame.display.set_caption("Garbage Game")
 
 class Spritesheet:
     def __init__(self, path):
@@ -11,7 +14,6 @@ class Spritesheet:
         sprite = pygame.Surface([width, height], pygame.SRCALPHA)  # Allows transparency
         sprite.blit(self.spritesheet, (0, 0), (x, y, width, height))
         sprite.set_colorkey(RED) 
-        
         return sprite
 
 class Game:
@@ -51,12 +53,20 @@ class Game:
         self.health_bar_width = 15  # Width of the health bar
         self.health_bar_x = WIN_WIDTH - 50  # Position of the bar (right side of the screen)
         self.health_bar_y = 20  # Y position based on max height
+
+        self.state = "start_screen"  # Add game state (start screen or main game)
+
     def increase_health(self):
         if self.health_bar_height + 10 <= self.health_bar_max_height:
             self.health_bar_height += 10
         else:
             self.health_bar_height = self.health_bar_max_height
 
+    def decrease_health(self):
+        if self.health_bar_height-5 >= 0:
+            self.health_bar_height -= 5
+        else:
+            self.health_bar_height = 0
 
     def createTileMap(self):
         for i, row in enumerate(tilemap):
@@ -90,7 +100,6 @@ class Game:
                 elif column == "P":
                     self.player = Player(self, j, i, 0, 0, self.trivia_game)
 
-        
         self.house = House(self, 7, 15, 0, 0)
         self.fish = Fish(self, 22, 10, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
@@ -99,7 +108,6 @@ class Game:
         self.earthP2 = EarthP2(self, 32, 2, 40, 40)
         self.earthP3 = EarthP3(self, 28, 21, 40, 40)
                 
-            
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.blocks = pygame.sprite.LayeredUpdates() # important for collision
@@ -112,7 +120,26 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            if self.state == "start_screen":
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.state = "main_game"  # Transition to the main game when space is pressed
+            if self.state == "end_screen":
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.health_bar_height = 10
+                    self.state = "main_game"
+
+    def draw_start_screen(self):
+        game_over_image = pygame.image.load("assets/images/start.png")
+        game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
+        self.screen.blit(game_over_image, (0, 0))
+        pygame.display.flip()
     
+    def draw_end_screen(self):
+        game_over_image = pygame.image.load("assets/images/gameover.png")
+        game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
+        self.screen.blit(game_over_image, (0, 0))
+        pygame.display.flip()
+
     def draw(self):
         self.screen.fill(RED) 
         self.all_sprites.draw(self.screen)
@@ -125,17 +152,22 @@ class Game:
         # Game Over
         if self.health_bar_height >= self.health_bar_max_height:
             print("Game Over")
-            self.running = False
+            self.state = "end_screen" 
 
-        self.clock.tick(FPS)
         pygame.display.update()
-    
+
     def main(self):
         while self.running:
             self.events()
-            self.update()
-            self.draw()
+            if self.state == "start_screen":
+                self.draw_start_screen()  # Show start screen
+            elif self.state == "main_game":
+                self.update()
+                self.draw()
+            elif self.state == "end_screen":
+                self.draw_end_screen()
 
+# Run the game
 game = Game()
 game.create()
 
