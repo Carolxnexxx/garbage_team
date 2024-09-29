@@ -446,10 +446,13 @@ class Player(pygame.sprite.Sprite):
         for sprite in collide:
             for block in collide:
                 if isinstance(block, House):
+                    print("trivia house")
                     self.trivia_game.draw_question("House: Renewables & Recycling")
                 elif isinstance(block, Factory):
+                    print("trivia factory")
                     self.trivia_game.draw_question("Factory: Greenhouse Gas Emissions & CO2 Emissions")
                 elif isinstance(block, Fish):
+                    print("trivia fish")
                     self.trivia_game.draw_question("Fish: pH Levels of the Water, Declining Fish, Water and Climate Change")
             
             if pressed[pygame.K_LEFT]:                    
@@ -615,7 +618,10 @@ class TriviaGame:
     
     def draw_question(self, category):
         if category in questions:
+            print("Category in questions")
             if self.current_question < len(questions):
+                print("self current question < len quesitons")
+                print(self.current_question)
                 question_data = questions[category][self.current_question]
 
                 quiz_surface = pygame.Surface((640, 480))  
@@ -645,8 +651,9 @@ class TriviaGame:
 
                 pygame.display.flip()
                 self.wait_for_answer(category)
-            else:
-                self.display_final_score()
+            # else:
+            #     self.display_final_score()
+            #     print("display score 1")
 
     def wait_for_answer(self, category):
         waiting = True
@@ -674,6 +681,8 @@ class TriviaGame:
                             self.draw_question(category)
                         else:
                             self.display_final_score()
+                            print("display score 2")
+                            self.current_question = 0
 
                     waiting = False       
     
