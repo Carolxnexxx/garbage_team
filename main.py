@@ -102,7 +102,7 @@ class Game:
         self.fish = Fish(self, 22, 10, 0, 0)
         self.earthP1 = EarthP1(self, 1, 1, 40, 40)
         self.earthP2 = EarthP2(self, 32, 2, 40, 40)
-        self.earthP3 = EarthP3(self, 28, 21, 40, 40)
+        self.earthP3 = EarthP3(self, 31, 21, 0, 0)
                 
     def create(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
