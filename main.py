@@ -54,7 +54,7 @@ class Game:
         self.health_bar_x = WIN_WIDTH - 50  # Position of the bar (right side of the screen)
         self.health_bar_y = 20  # Y position based on max height
 
-        self.state = "start_screen"  # Add game state (start screen or main game)
+        self.state = "start_screen" 
 
     def increase_health(self):
         if self.health_bar_height + 10 <= self.health_bar_max_height:
