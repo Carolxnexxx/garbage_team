@@ -372,33 +372,24 @@ class Player(pygame.sprite.Sprite):
 
     def collide_block(self):
         pressed = pygame.key.get_pressed()
-        collide_blocks = pygame.sprite.spritecollide(self, self.game.blocks, False, pygame.sprite.collide_rect_ratio(0.85) )
-        #collide_houses = pygame.sprite.spritecollide(self, self.game.houses, False) # important
-        if collide_blocks:
-            for block in collide_blocks:
-                if isinstance(block, House):
-                    self.trivia_game.draw_question("House: Renewables & Recycling")
-                elif isinstance(block, Factory):
-                    self.trivia_game.draw_question("Factory: Greenhouse Gas Emissions & CO2 Emissions")
-                elif isinstance(block, Fish):
-                    self.trivia_game.draw_question("Fish: pH Levels of the Water, Declining Fish, Water and Climate Change")
-                else:
-                    if pressed[pygame.K_LEFT]:                    
-                        self.rect.x += PLAYER_STEPS
-                    elif pressed[pygame.K_RIGHT]:
-                        self.rect.x -= PLAYER_STEPS
-                    elif pressed[pygame.K_UP]:
-                        self.rect.y += PLAYER_STEPS
-                    elif pressed[pygame.K_DOWN]:
-                        self.rect.y -= PLAYER_STEPS
-                    return
-                    
         
-        bomb_tree_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, pygame.sprite.collide_rect_ratio(0.85))
-        pine_tree_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, pygame.sprite.collide_rect_ratio(0.85))
-        garbage_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, pygame.sprite.collide_rect_ratio(0.85))
+        # Check collision with 
+        collide = pygame.sprite.spritecollide(self, self.game.blocks, False, 
+                                            pygame.sprite.collide_rect_ratio(0.85))  
+        
+        # Check collision with BombTree specifically
+        bomb_tree_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                                        pygame.sprite.collide_rect_ratio(0.85))
+        
+        pine_tree_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                                        pygame.sprite.collide_rect_ratio(0.85))
+    
+        garbage_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                              pygame.sprite.collide_rect_ratio(0.85))
+        
         puzzle_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
                                               pygame.sprite.collide_rect_ratio(0.85))
+        
         door_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
                                               pygame.sprite.collide_rect_ratio(0.85))
 
@@ -438,6 +429,7 @@ class Player(pygame.sprite.Sprite):
                 return  # Exit after processing the collision
         self.health_increased = False
         self.health_decreased = False
+        
         for sprite in pine_tree_collide:
             if isinstance(sprite, PineTree):
                 if pressed[pygame.K_LEFT]:                    
@@ -450,11 +442,15 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y -= PLAYER_STEPS
                 return  # Exit after processing the collision
         
-        for sprite in collide_blocks:
-            self.game.increase_health()
-            self.trivia_game.draw_question()  # Call the trivia game
+        for sprite in collide:
+            for block in collide:
+                if isinstance(block, House):
+                    self.trivia_game.draw_question("House: Renewables & Recycling")
+                elif isinstance(block, Factory):
+                    self.trivia_game.draw_question("Factory: Greenhouse Gas Emissions & CO2 Emissions")
+                elif isinstance(block, Fish):
+                    self.trivia_game.draw_question("Fish: pH Levels of the Water, Declining Fish, Water and Climate Change")
             
-            # Prevent player from moving into the bomb tree
             if pressed[pygame.K_LEFT]:                    
                 self.rect.x += PLAYER_STEPS
             elif pressed[pygame.K_RIGHT]:
@@ -463,7 +459,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.y += PLAYER_STEPS
             elif pressed[pygame.K_DOWN]:
                 self.rect.y -= PLAYER_STEPS
-            return  # Exit after processing the collision
+            return 
     
     def display_winner_screen(self):
         font = pygame.font.SysFont('Arial', 80)
