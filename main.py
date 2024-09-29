@@ -38,6 +38,8 @@ class Game:
         self.fish_spritesheet = Spritesheet('assets/images/fish.png')
         self.bomb_tree_spritesheet = Spritesheet('assets/images/bomb_tree.png')
         self.pine_tree_spritesheet = Spritesheet('assets/images/pine_tree.png')
+        self.garbage_spritesheet = Spritesheet('assets/images/garbage.png')
+        self.grass_spritesheet = Spritesheet('assets/images/grass.png')
         self.fire_spritesheet = Spritesheet('assets/images/fire.png')  # Load fire image
         self.running = True
         self.trivia_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT)) 
@@ -83,6 +85,8 @@ class Game:
                     BombTree(self, j, i, 0, 0)
                 elif column == "T":
                     PineTree(self, j, i, 0, 0)
+                elif column == "R":
+                    Garbage(self, j, i, 0, 0)
                 elif column == "P":
                     self.player = Player(self, j, i, 0, 0, self.trivia_game)
 
