@@ -802,6 +802,8 @@ class TriviaGame:
                             feedback_text = "Correct!"
                         else:
                             feedback_text = "Incorrect, Correct answer is number " + str(correct_answer)
+                            print(feedback_text)
+                            self.game.increase_health()
                                 
 
                         self.display_feedback(feedback_text)  # Display feedback
