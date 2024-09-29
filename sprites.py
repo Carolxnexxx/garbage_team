@@ -1,6 +1,8 @@
 from configuration import *
 import pygame
 
+global crash
+
 class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
@@ -308,6 +310,8 @@ class Player(pygame.sprite.Sprite):
         self.x_change = 0
         self.y_change = 0
 
+        self.health_increased = False
+
         # Load the player image from the spritesheet using the provided coordinates
         self.image = self.game.player_spritesheet.get_image(0, 0, self.width, self.height)
         self.rect = self.image.get_rect()
@@ -358,8 +362,10 @@ class Player(pygame.sprite.Sprite):
 
         for sprite in bomb_tree_collide:
             if isinstance(sprite, BombTree):
-                sprite.transform_to_fire()  # Transform the tree into fire
-
+                if not self.health_increased:  # Only increase health once per collision
+                    sprite.transform_to_fire()  # Transform the tree into fire
+                    self.game.increase_health()
+                    self.health_increased = True
                 if pressed[pygame.K_LEFT]:                    
                     self.rect.x += PLAYER_STEPS
                 elif pressed[pygame.K_RIGHT]:
@@ -369,7 +375,7 @@ class Player(pygame.sprite.Sprite):
                 elif pressed[pygame.K_DOWN]:
                     self.rect.y -= PLAYER_STEPS
                 return  # Exit after processing the collision
-        
+        self.health_increased = False
         for sprite in pine_tree_collide:
             if isinstance(sprite, PineTree):
                 if pressed[pygame.K_LEFT]:                    
