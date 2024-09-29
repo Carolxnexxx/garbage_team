@@ -39,8 +39,6 @@ class Ground(pygame.sprite.Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
     
-    
-
 class BombTree(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
@@ -335,6 +333,7 @@ class Player(pygame.sprite.Sprite):
         self.y_change = 0
 
         self.health_increased = False
+        self.health_decreased = False
 
         # Load the player image from the spritesheet using the provided coordinates
         self.image = self.game.player_spritesheet.get_image(0, 0, self.width, self.height)
@@ -389,7 +388,10 @@ class Player(pygame.sprite.Sprite):
 
         for sprite in garbage_collide:
             if isinstance(sprite, Garbage):
-                sprite.transform_to_grass()
+                if not self.health_decreased:
+                    sprite.transform_to_grass()
+                    self.game.decrease_health()
+                    self.health_decreased = True
                 return  
 
         for sprite in bomb_tree_collide:
@@ -408,6 +410,7 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y -= PLAYER_STEPS
                 return  # Exit after processing the collision
         self.health_increased = False
+        self.health_decreased = False
         for sprite in pine_tree_collide:
             if isinstance(sprite, PineTree):
                 if pressed[pygame.K_LEFT]:                    
@@ -421,7 +424,6 @@ class Player(pygame.sprite.Sprite):
                 return  # Exit after processing the collision
         
         for sprite in collide:
-            self.game.increase_health()
             self.trivia_game.draw_question()  # Call the trivia game
             
             # Prevent player from moving into the bomb tree
@@ -434,7 +436,6 @@ class Player(pygame.sprite.Sprite):
             elif pressed[pygame.K_DOWN]:
                 self.rect.y -= PLAYER_STEPS
             return  # Exit after processing the collision
-
 
 questions = [
     {

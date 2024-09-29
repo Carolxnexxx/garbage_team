@@ -55,8 +55,8 @@ class Game:
             self.health_bar_height = self.health_bar_max_height
 
     def decrease_health(self):
-        if self.health_bar_height-10 >= 0:
-            self.health_bar_height -= 10
+        if self.health_bar_height-5 >= 0:
+            self.health_bar_height -= 5
         else:
             self.health_bar_height = 0
 
