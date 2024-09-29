@@ -7,6 +7,66 @@ fishKey = False
 houseKey = False
 factoryKey = False
 
+class Key1(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = HEALTH_LAYER
+        self.groups = self.game.all_sprites, self.game.blocks
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        scale_factor = 2.5
+
+        self.image = self.game.key1_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
+
+        self.rect = self.image.get_rect()
+
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+class Key2(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = HEALTH_LAYER
+        self.groups = self.game.all_sprites, self.game.blocks
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        scale_factor = 2.5
+
+        self.image = self.game.key2_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
+
+        self.rect = self.image.get_rect()
+
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+class Key3(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, img_x, img_y):
+        self.game = game
+        self._layer = HEALTH_LAYER
+        self.groups = self.game.all_sprites, self.game.blocks
+        pygame.sprite.Sprite.__init__(self, self.groups)
+
+        self.width = TILESIZE
+        self.height = TILESIZE
+
+        scale_factor = 2.5
+
+        self.image = self.game.key3_spritesheet.get_image(img_x, img_y, self.width, self.height)
+        self.image = pygame.transform.scale(self.image, (self.width * scale_factor, self.height * scale_factor))
+
+        self.rect = self.image.get_rect()
+
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
 class Block(pygame.sprite.Sprite):
     def __init__(self, game, x, y, img_x, img_y):
         self.game = game
@@ -397,6 +457,20 @@ class Player(pygame.sprite.Sprite):
         door_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
                                               pygame.sprite.collide_rect_ratio(0.85))
 
+        wall_collide = pygame.sprite.spritecollide(self, self.game.all_sprites, False, 
+                                              pygame.sprite.collide_rect_ratio(0.85))
+
+        for sprite in wall_collide:
+            if isinstance(sprite, Wall):
+                if pressed[pygame.K_LEFT]:                    
+                    self.rect.x += PLAYER_STEPS
+                if pressed[pygame.K_RIGHT]:
+                    self.rect.x -= PLAYER_STEPS
+                if pressed[pygame.K_UP]:
+                    self.rect.y += PLAYER_STEPS
+                if pressed[pygame.K_DOWN]:
+                    self.rect.y -= PLAYER_STEPS
+                return
 
         for sprite in puzzle_collide:
             if isinstance(sprite, (EarthP1, EarthP2, EarthP3)):
@@ -447,6 +521,47 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y -= PLAYER_STEPS
                 return  # Exit after processing the collision
         
+        for sprite in door_collide:
+            if isinstance(sprite, WaterDoor1):
+                
+                if fishKey == False:
+                    if pressed[pygame.K_LEFT]:                    
+                        self.rect.x += PLAYER_STEPS
+                    elif pressed[pygame.K_RIGHT]:
+                        self.rect.x -= PLAYER_STEPS
+                    elif pressed[pygame.K_UP]:
+                        self.rect.y += PLAYER_STEPS
+                    elif pressed[pygame.K_DOWN]:
+                        self.rect.y -= PLAYER_STEPS
+                    return
+
+            elif isinstance(sprite, IceDoor1):
+                
+                if factoryKey == False:
+                    if pressed[pygame.K_LEFT]:                    
+                        self.rect.x += PLAYER_STEPS
+                    elif pressed[pygame.K_RIGHT]:
+                        self.rect.x -= PLAYER_STEPS
+                    elif pressed[pygame.K_UP]:
+                        self.rect.y += PLAYER_STEPS
+                    elif pressed[pygame.K_DOWN]:
+                        self.rect.y -= PLAYER_STEPS
+                    return
+                
+            elif isinstance(sprite, WoodDoor1):
+                
+                if houseKey == False:
+                    if pressed[pygame.K_LEFT]:                    
+                        self.rect.x += PLAYER_STEPS
+                    elif pressed[pygame.K_RIGHT]:
+                        self.rect.x -= PLAYER_STEPS
+                    elif pressed[pygame.K_UP]:
+                        self.rect.y += PLAYER_STEPS
+                    elif pressed[pygame.K_DOWN]:
+                        self.rect.y -= PLAYER_STEPS
+                    return 
+                
+        
         for sprite in collide:
             for block in collide:
                 if isinstance(block, House):
@@ -475,30 +590,30 @@ questions = {
         {
             "question": "How many metric tons of CO2 were released, globally, in 2022?",
             "options": [
-                "A) 65.43 billion",
-                "B) 37.15 billion",
-                "C) 103.23 billion",
-                "D) 23.12 billion"
+                "1) 65.43 billion",
+                "2) 37.15 billion",
+                "3) 103.23 billion",
+                "4) 23.12 billion"
             ],
-            "answer": 1  # Correct answer key
+            "answer": 2  # Correct answer key
         },
         {
             "question": "Which of the following lists do NOT only contain greenhouse gases?",
             "options": [
-                "A) Carbon dioxide (CO2), Methane (CH4), Nitrous Oxide (N2O), Water vapour (H2O)",
-                "B) Carbon dioxide (CO2), Nitrous Oxide (N2O), Argon (Ar), Methane (CH4)",
-                "C) Methane (CH4), Nitrous Oxide (N2O), Hydrofluorocarbons (HFCs), Nitrogen trifluoride (NF3)",
-                "D) Hydrofluorocarbons (HFCs), Sulfur hexafluoride (SF6), Nitrous Oxide (N2O), Methane (CH4)"
+                "1) CO2, CH4, N2O, H2O",
+                "2) CO2, N2O, Ar, CH4",
+                "3) CH4, N2O, HFCs, NF3",
+                "4) HFCs, SF6, N2O, CH4"
             ],
             "answer": 2
         },
         {
             "question": "Where do hydrofluorocarbons (HFCs) come from?",
             "options": [
-                "A) Refrigerators",
-                "B) Air conditioners",
-                "C) Insulating foams",
-                "D) All of the above"
+                "1) Refrigerators",
+                "2) Air conditioners",
+                "3) Insulating foams",
+                "4) All of the above"
             ],
             "answer": 4
         }
@@ -508,30 +623,30 @@ questions = {
         {
             "question": "What is biomass? What can it be used for?",
             "options": [
-                "A) Biomass refers to organic material that comes from plants and animals that can be burned directly for heat or converted to liquid and gaseous fuels.",
-                "B) Biomass is a fashion trend involving clothing made exclusively from recycled plastic.",
-                "C) Biomass is a type of plastic used to make disposable utensils.",
-                "D) Biomass refers to a method of creating electricity using solar panels."
+                "1) Organic material from plants and animals that can be burned for heat or converted to liquid and gaseous fuels.",
+                "2) Biomass is a fashion trend involving clothing made exclusively from recycled plastic.",
+                "3) Biomass is a type of plastic used to make disposable utensils.",
+                "4) Biomass refers to a method of creating electricity using solar panels."
             ],
             "answer": 1
         },
         {
             "question": "Choose the renewable energy source:",
             "options": [
-                "A) Natural gas",
-                "B) Nuclear energy",
-                "C) Coal",
-                "D) Biomass"
+                "1) Natural gas",
+                "2) Nuclear energy",
+                "3) Coal",
+                "4) Biomass"
             ],
             "answer": 4
         },
         {
             "question": "Should you use renewable energy instead of non-renewable energy?",
             "options": [
-                "A) ABSOLUTELY 100%",
-                "B) No",
-                "C) Too expensive; no.",
-                "D) Ehhhh, maybe later."
+                "1) ABSOLUTELY 100%",
+                "2) No",
+                "3) Too expensive; no.",
+                "4) Ehhhh, maybe later."
             ],
             "answer": 1
         }
@@ -541,30 +656,30 @@ questions = {
         {
             "question": "What is too high of a pH for coral to survive?",
             "options": [
-                "A) 8.5",
-                "B) 8.3",
-                "C) 7.3",
-                "D) 8.7"
+                "1) 8.5",
+                "2) 8.3",
+                "3) 7.3",
+                "4) 8.7"
             ],
-            "answer": 1
+            "answer": 4
         },
         {
             "question": "Why are wetlands, oceans, lakes and bodies of water important?",
             "options": [
-                "A) Protecting and improving water quality",
-                "B) Providing fish and wildlife with sufficient amounts of tomatoes",
-                "C) Lakes are essential for providing Wi-Fi signals to nearby towns and cities.",
-                "D) Lakes are essential for generating wind power by simply existing as large bodies of water."
+                "1) Protecting and improving water quality",
+                "2) Providing fish and wildlife with sufficient amounts of tomatoes",
+                "3) Lakes are essential for providing Wi-Fi signals to nearby towns and cities.",
+                "4) Lakes are essential for generating wind power by simply existing as large bodies of water."
             ],
             "answer": 1
         },
         {
             "question": "What are the consequences of rising sea levels?",
             "options": [
-                "A) Saltwater Intrusion: Rising seas can cause saltwater to infiltrate freshwater aquifers, affecting drinking water supplies and agriculture.",
-                "B) Decreased storms: Rising sea levels lead to decreased storm activity and milder weather overall.",
-                "C) Increase in fish population: As sea levels rise, fish populations thrive due to increased water space.",
-                "D) Agriculture boost: Rising sea levels will lead to an increase in land available for farming due to the flooding of urban areas."
+                "1) Saltwater Intrusion",
+                "2) Decreased storms",
+                "3) Increase in fish population",
+                "4) Agriculture boost"
             ],
             "answer": 1
         }
@@ -733,7 +848,9 @@ class TriviaGame:
                 factoryKey = True
         else:
             print("try again")
-        self.game.screen.fill(WHITE)
+        quiz_surface = pygame.Surface((640, 480))
+        quiz_surface.fill(WHITE) 
+        self.game.screen.blit(quiz_surface, (100, 60))
         score_text = self.font.render(f"Your Score: {self.score}/{len(questions)}", True, BLACK)
         self.game.screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2))
         pygame.display.flip()

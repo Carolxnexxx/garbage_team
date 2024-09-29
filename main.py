@@ -41,6 +41,10 @@ class Game:
         self.garbage_spritesheet = Spritesheet('assets/images/garbage.png')
         self.grass_spritesheet = Spritesheet('assets/images/grass.png')
         self.fire_spritesheet = Spritesheet('assets/images/fire.png')  # Load fire image
+        self.key1_spritesheet = Spritesheet('assets/images/key1.png')
+        self.key2_spritesheet = Spritesheet('assets/images/key2.png')
+        self.key3_spritesheet = Spritesheet('assets/images/key3.png')
+
         self.running = True
         self.trivia_surface = pygame.Surface((WIN_WIDTH, WIN_HEIGHT)) 
         self.trivia_game = TriviaGame(self) 
@@ -96,12 +100,13 @@ class Game:
                     PineTree(self, j, i, 0, 0)
                 elif column == "R":
                     Garbage(self, j, i, 0, 0)
-                elif column == "P":
+                elif column == "6":
                     self.player = Player(self, j, i, 0, 0, self.trivia_game)
 
-        
+        self.key1 = Key1(self, 0, 0.5, 0, 0)
+        self.key2 = Key2(self, 38, 4, 0, 0)
+        self.key3 = Key3(self, 38, 20, 0, 0)
         self.house = House(self, 7, 15, 0, 0)
-        self.fish = Fish(self, 22, 10, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
         self.fish = Fish(self, 22, 10, 0, 0)
         self.earthP1 = EarthP1(self, 1, 1, 0, 0)
@@ -169,8 +174,9 @@ class Game:
 
         # Game Over
         if self.health_bar_height >= self.health_bar_max_height:
-            print("Game Over")
-            self.running = False
+            self.state = "end_screen"
+            # print("Game Over")
+            # self.running = False
 
         self.clock.tick(FPS)
         pygame.display.update()
