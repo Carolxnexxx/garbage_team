@@ -95,9 +95,9 @@ class Game:
         self.fish = Fish(self, 22, 10, 0, 0)
         self.factory = Factory(self, 18, 20, 0, 0)
         self.fish = Fish(self, 22, 10, 0, 0)
-        self.earthP1 = EarthP1(self, 1, 1, 40, 40)
-        self.earthP2 = EarthP2(self, 32, 2, 40, 40)
-        self.earthP3 = EarthP3(self, 28, 21, 40, 40)
+        self.earthP1 = EarthP1(self, 1, 1, 0, 0)
+        self.earthP2 = EarthP2(self, 32, 6, 0, 0)
+        self.earthP3 = EarthP3(self, 31, 21, 0, 0)
                 
             
     def create(self):
@@ -112,7 +112,43 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            if self.state == "start_screen":
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.state = "lore_screen"
+            elif self.state == "lore_screen":
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.state = "main_game" 
+            elif self.state == "end_screen":
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    self.health_bar_height = 10
+                    self.state = "main_game"
+
+    def draw_start_screen(self):
+        game_over_image = pygame.image.load("assets/images/start.png")
+        game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
+        self.screen.blit(game_over_image, (0, 0))
+        pygame.display.flip()
+
+    def draw_lore_screen(self):
+        game_over_image = pygame.image.load("assets/images/lore.png")
+        game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
+        self.screen.blit(game_over_image, (0, 0))
+        pygame.display.flip()
     
+    def draw_end_screen(self):
+        game_over_image = pygame.image.load("assets/images/gameover.png")
+        game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
+        self.screen.blit(game_over_image, (0, 0))
+        pygame.display.flip()
+
+    def draw_win_screen(self):
+        game_over_image = pygame.image.load("assets/images/winner.png")
+        game_over_image = pygame.transform.scale(game_over_image, (WIN_WIDTH, WIN_HEIGHT))
+        self.screen.blit(game_over_image, (0, 0))
+        pygame.display.flip()
+        pygame.time.wait(7000)
+        pygame.quit()
+
     def draw(self):
         self.screen.fill(RED) 
         self.all_sprites.draw(self.screen)
@@ -133,8 +169,15 @@ class Game:
     def main(self):
         while self.running:
             self.events()
-            self.update()
-            self.draw()
+            if self.state == "start_screen":
+                self.draw_start_screen()  # Show start screen
+            elif self.state == "lore_screen":
+                self.draw_lore_screen()
+            elif self.state == "main_game":
+                self.update()
+                self.draw()
+            elif self.state == "end_screen":
+                self.draw_end_screen()
 
 game = Game()
 game.create()
