@@ -455,33 +455,39 @@ class Player(pygame.sprite.Sprite):
 
 questions = [
     {
-        "question": "Choose a renewable energy source:",
+        "question": "Where do hydrofluorocarbons (HFCs) come from?",
         "options": [
-            "1. Natural gas",
-            "2. Nuclear",
-            "3. Coal",
-            "4. Hydro electricity"
+            "1. Refrigerators",
+            "2. Air conditioners",
+            "3. Insulating foams",
+            "4. All of the above"
         ],
         "answer": 4
     },
     {
-        "question": "How many tonnes of CO2 are emitted per year?",
+        "question": "Which of the following lists do NOT only contain greenhouse gases?",
         "options": [
-            "1. 34 billion",
-            "2. 100 million",
-            "3. 63 billion",
-            "4. 21 billion"
+            "1. Carbon dioxide (CO2), Methane (CH4), Nitrous Oxide (N2O), Water vapour (H2O)",
+            "2. Carbon dioxide (CO2), Nitrous Oxide (N2O), Argon (Ar), Methane (CH4)",
+            "3. Methane (CH4), Nitrous Oxide (N2O), Hydrofluorocarbons (HFCs), Nitrogen trifluoride (NF3)",
+            "4. Hydrofluorocarbons (HFCs), Sulfur hexafluoride (SF6), Nitrous Oxide (N2O), Methane (CH4)"
         ],
         "answer": 1
     },
     {
-        "question": "The answer is 1",
-        "options": [""],
-        "answer": 1
+        "question": "How many metric tons of CO2 were released, globally, in 2022?",
+        "options": [
+            "1. 65.43 billion",
+            "2. 37.15 million",
+            "3. 103.23 billion",
+            "4. 23.12 billion"
+        ],
+        "answer": 2
     }
 ]
-FONT_SIZE = 40
-WIDTH, HEIGHT = 800, 600
+FONT_SIZE = 30
+#WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 600,400
 
 class TriviaGame:
     def __init__(self, game):
@@ -526,4 +532,4 @@ class TriviaGame:
         score_text = self.font.render(f"Your Score: {self.score}/{len(questions)}", True, BLACK)
         self.game.screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2))
         pygame.display.flip()
-        pygame.time.wait(3000)
+        pygame.time.wait(100)
